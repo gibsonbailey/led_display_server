@@ -1,2 +1,4 @@
 LEDENV/
 env
+media/
+__pycache__/
