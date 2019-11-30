@@ -1,7 +1,18 @@
 <!doctype html>
 <head>
 <link rel="icon" href="/uploads/Git-Logo-Black.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
+<script>
+	console.log('making requests.')
+
+	$.get('/api/v1/text_uploads')
+	.done(function (data) {
+		console.log(JSON.parse(data))
+	})
+
+	console.log('finished making requests.')
+</script>
 
 <title>Upload new File</title>
 
@@ -12,4 +23,4 @@
     <input type=file name=file>
     <input type=submit value=Upload>
 </form>
-<img src="/uploads/index.jpeg" style="width: 60%;"><img src="/uploads/index.jpeg" style="width: 60%;"><img src="/uploads/index.jpeg" style="width: 60%;"><img src="/uploads/index.jpeg" style="width: 60%;"><img src="/uploads/index.jpeg" style="width: 60%;"><img src="/uploads/index.jpeg" style="width: 60%;"><img src="/uploads/index.jpeg" style="width: 60%;"><img src="/uploads/index.jpeg" style="width: 60%;"><img src="/uploads/index.jpeg" style="width: 60%;">
+<h4>asdfseaf</h4>

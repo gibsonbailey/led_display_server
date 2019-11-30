@@ -1,5 +1,6 @@
 import os, sys, signal
 import os.path
+import json
 
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
@@ -9,8 +10,13 @@ latest_upload_filename = ''
 latest_upload_text = ''
 child_pid = None
 
-UPLOAD_FOLDER = '/home/brendon/led_display_server/media'
+PROJECT_BASE = os.path.dirname( __file__)
+PROCESS_1 = os.path.join(PROJECT_BASE, 'testprocess1.py')
+PROCESS_2 = os.path.join(PROJECT_BASE, 'testprocess2.py')
+UPLOAD_FOLDER = os.path.join(PROJECT_BASE, 'media')
+
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "super secret key"
@@ -30,6 +36,14 @@ def start_new_child(filename):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/api/v1/text_uploads', methods=['GET'])
+def get_text_data():
+    response = ''
+    with open('data.txt', 'r+') as f:
+        response = f.readlines()
+        f.close()
+    return json.dumps(response)
+
 @app.route('/uploads/<filename>', methods=['GET'])
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
@@ -48,11 +62,15 @@ def upload_file():
         text = request.form.get('message')
         if text:
             latest_upload_text = text
+            with open('data.txt', 'a') as f:
+                f.write(text + '\n')
+                f.close()
+                
             print(latest_upload_text, file=sys.stderr)
             # Send to LED Board and Redirect
             # if PIDEXISTS, KILL 
             # FORK PROCESS1
-            start_new_child('/home/nic/led_display_server/testprocess1.py')
+            start_new_child(PROCESS_1)
 
 
         else:
@@ -78,16 +96,16 @@ def upload_file():
                 # if PIDEXISTS, KILL 
                 # FORK PROCESS2
                 
-                start_new_child('/home/nic/led_display_server/testprocess2.py')
+                start_new_child(PROCESS_2)
     
     
                 return redirect(request.url)
 
-    with open("website.html") as inf:    
-        response = inf.read()
-        inf.close()
+    with open("website.html") as f:    
+        response = f.read()
+        f.close()
 
-    latest_upload_pathname = "/home/brendon/led_display_server/" + latest_upload_filename
+    latest_upload_pathname = os.path.join(PROJECT_BASE, latest_upload_filename)
 
     print(latest_upload_pathname)
 
