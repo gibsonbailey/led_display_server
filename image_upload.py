@@ -1,13 +1,15 @@
 import os, sys, signal
+import os.path
 
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
+from os import path
 
 latest_upload_filename = ''
 latest_upload_text = ''
 child_pid = None
 
-UPLOAD_FOLDER = '/home/nic/led_display_server/media'
+UPLOAD_FOLDER = '/home/brendon/led_display_server/media'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -89,27 +91,23 @@ def upload_file():
     
                 return redirect(request.url)
 
-    response = '''
-    <!doctype html>
-    <head>
-    <link rel="icon" href="/uploads/Git-Logo-Black.png">
-    </head>
+    with open("website.html") as inf:    
+        response = inf.read()
+        inf.close()
 
-    <title>Upload new File</title>
+    latest_upload_pathname = "/home/brendon/led_display_server/" + latest_upload_filename
 
-    <h1>Upload new File</h1>
+    print(latest_upload_pathname)
 
-    <form method=post enctype=multipart/form-data>
-        <input type=text name=message>
-        <input type=file name=file>
-        <input type=submit value=Upload>
-    </form>
-    ''' 
     if latest_upload_text:
         header_tag = '<h4>{}</h4>'.format(latest_upload_text)
         response += header_tag
-    if latest_upload_filename:
+    if latest_upload_filename and not os.path.exists(latest_upload_pathname):
        image_tag = '<img src="/uploads/{}" style="width: 60%;">'.format(latest_upload_filename)
        response += image_tag
-     
+    
+    with open("website.html", "w") as outf:
+        outf.write(response)
+        outf.close()
+
     return response
