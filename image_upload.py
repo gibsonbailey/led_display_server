@@ -48,6 +48,14 @@ def get_text_data():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/index', methods=['GET'])
+def serve_homepage():
+    return send_from_directory('/home/brendon/led_display_server', 'index.html')
+
+@app.route('/js/app.js', methods=['GET'])
+def serve_react():
+    return send_from_directory('/home/brendon/led_display_server/js', 'app.js')
+
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     global latest_upload_filename
