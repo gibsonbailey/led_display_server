@@ -12,9 +12,14 @@ class Image  extends React.Component {
 class TextCommit  extends React.Component {
     render() {
         return (
-            <div>
-                <p>{this.props.text}</p>
-                <p>{this.props.date}</p>
+            <div className="ui card">
+                <div className="content">
+                    <div className="description">{this.props.text}</div>
+                </div>
+                <div className="extra content">
+                    {this.props.date}
+                </div>
+
             </div>
         )
     }
@@ -61,7 +66,7 @@ class TextHistory  extends React.Component {
                 {this.state.history.map(item => 
                     <TextCommit text={item.text} date={item.date} key={item.id} />
                 )}
-                <button>More</button>
+                <button className="ui basic blue button">More</button>
            </div>
             )
     }
@@ -71,10 +76,12 @@ class Text  extends React.Component {
     render() {
         return (
             <div>
-                <h1>Text</h1>
-                <form>
-                   <textarea></textarea>
-                   <input type="submit"></input>
+                <h1 className="ui header">Text</h1>
+                <form className="ui form">
+                    <div className="ui field">
+                        <textarea placeholder="Enter some text!"></textarea>
+                    </div>
+                    <button className="ui blue button">Submit</button>
                 </form>
                 <TextHistory/>
             </div>
@@ -84,9 +91,14 @@ class Text  extends React.Component {
 
 class App extends React.Component {
     render() {
+        const disappear = {
+            //display: 'none',
+            background: 'black',
+        }
+
         return (
             <div>
-               <Image/>
+               <Image style={disappear}/>
                <Text/>
             </div>   
         )

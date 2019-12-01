@@ -10,7 +10,7 @@ latest_upload_filename = ''
 latest_upload_text = ''
 child_pid = None
 
-PROJECT_BASE = os.path.dirname( __file__)
+PROJECT_BASE = os.path.dirname(__file__)
 PROCESS_1 = os.path.join(PROJECT_BASE, 'testprocess1.py')
 PROCESS_2 = os.path.join(PROJECT_BASE, 'testprocess2.py')
 UPLOAD_FOLDER = os.path.join(PROJECT_BASE, 'media')
