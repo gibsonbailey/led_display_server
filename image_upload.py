@@ -42,6 +42,8 @@ def get_text_data():
     with open('data.txt', 'r+') as f:
         response = f.readlines()
         f.close()
+    for i in range(len(response)):
+        response[i] = response[i][:-1]
     return json.dumps(response)
 
 @app.route('/uploads/<filename>', methods=['GET'])
